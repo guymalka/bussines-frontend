@@ -1,0 +1,5 @@
+{
+    "appService.deploySubpath": "",
+    "appService.showBuildDuringDeployPrompt": false,
+    "appService.defaultWebAppToDeploy": "/subscriptions/b1f63cc6-39ad-4f39-8ae3-1fb5eeb98414/resourceGroups/appsvc_rg_linux_centralus/providers/Microsoft.Web/sites/playhelloworld"
+}
