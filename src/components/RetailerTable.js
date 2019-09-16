@@ -14,8 +14,7 @@ class RetailerTable extends React.Component {
       
       fetch('https://playhelloworld.azurewebsites.net/api/retailer')
         .then(response => response.json())
-        .then(json => {
-          console.log(json);
+        .then(json => {          
           this.setState({ data: json });
         });        
       

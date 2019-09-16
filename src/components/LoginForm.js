@@ -6,7 +6,7 @@ class LoginForm extends Component {
   constructor() {
       super()
       this.state = {
-          username: '',
+          email: '',
           password: '',
           redirectTo: null
       }
@@ -15,45 +15,39 @@ class LoginForm extends Component {
 
   }
 
-  handleChange(event) {
+  handleChange(event) {      
       this.setState({
           [event.target.name]: event.target.value
       })
   }
 
   handleSubmit(event) {
-      event.preventDefault()
-      console.log('handleSubmit')
-      fetch(`http://localhost:5000/api/user/login`, {
-            'mode': 'no-cors',
+      event.preventDefault()      
+
+      fetch(`${process.env.REACT_APP_NOT_SECRET_CODE}/api/user/login`, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            method: "POST",
-            body: JSON.stringify({ username: 'guym', password: 'vaben01'  })
+            method: "POST",            
+            body: JSON.stringify({ email: this.state.email, password: this.state.password  })
         })            
             .then(res => res.json())
             .then(response => {
-              console.log('login response: ')
-              console.log(response)
-              if (response.status === 200) {
                   // update App.js state
-                  this.props.updateUser({
-                      loggedIn: true,
-                      username: response.data.username
-                  })
+                  localStorage.setItem('user', JSON.stringify( response ));
                   // update the state to redirect to home
                   this.setState({
-                      redirectTo: '/'
-                  })
-              }
+                      redirectTo: '/RetailerInfo'
+                  })              
           }).catch(error => {
+              alert('משתמש לא קיים')
+            
               console.log('login error: ')
               console.log(error);
               
           })
-
+        
      
   }
 
@@ -62,31 +56,36 @@ class LoginForm extends Component {
           return <Redirect to={{ pathname: this.state.redirectTo }} />
       } else {
           return (
-              <div>
-                  <h4>Login</h4>
-                  <form className="form-horizontal">
+              <div  >                  
+                  <form style={{  marginRight:'auto', marginLeft:'auto', display:'block' }} className="form-horizontal">
+                  <div className="form-group">
+                  <div className="col-3 col-ml-auto">
+                  <h4>כניסה</h4>
+                      </div>
+                      </div>
+                  
                       <div className="form-group">
-                          <div className="col-1 col-ml-auto">
-                              <label className="form-label" htmlFor="username">Username</label>
+                          <div className="col-3 col-ml-auto">
+                              <label className="form-label" htmlFor="email">דואר אלקטרוני</label>
                           </div>
                           <div className="col-3 col-mr-auto">
                               <input className="form-input"
                                   type="text"
-                                  id="username"
-                                  name="username"
-                                  placeholder="Username"
-                                  value={this.state.username}
+                                  id="email"
+                                  name="email"
+                                  placeholder="כתובת דואר"
+                                  value={this.state.email}
                                   onChange={this.handleChange}
                               />
                           </div>
                       </div>
                       <div className="form-group">
-                          <div className="col-1 col-ml-auto">
-                              <label className="form-label" htmlFor="password">Password: </label>
+                          <div className="col-3 col-ml-auto">
+                              <label className="form-label" htmlFor="password">סיסמה: </label>
                           </div>
                           <div className="col-3 col-mr-auto">
                               <input className="form-input"
-                                  placeholder="password"
+                                  placeholder="סיסמה"
                                   type="password"
                                   name="password"
                                   value={this.state.password}
@@ -95,12 +94,13 @@ class LoginForm extends Component {
                           </div>
                       </div>
                       <div className="form-group ">
-                          <div className="col-7"></div>
+                      <div className="col-3 col-ml-auto">
                           <button
-                              className="btn btn-primary col-1 col-mr-auto"
+                              className="btn btn-primary "
                              
                               onClick={this.handleSubmit}
-                              type="submit">Login</button>
+                              type="submit">כניסה</button>
+                      </div>
                       </div>
                   </form>
               </div>

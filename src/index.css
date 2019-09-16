@@ -1,5 +1,13 @@
 body {
   margin: 0;
-  padding: 0;
+  padding: 24px;
   font-family: sans-serif;
+}
+
+.btn-toolbar{
+  padding-bottom: '10px';
+}
+
+.rt-td{
+  float: right;
 }
