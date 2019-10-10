@@ -27,6 +27,10 @@
   to { transform: rotate(360deg); }
 }
 
+label.margin{
+  margin-left: 10px;
+}
+
 form.border{
   border-bottom-color: coral;
   border-bottom-style: solid;
@@ -44,6 +48,27 @@ H2.header{
   float: right;
 }
 
-p.smallNote{
-  font-size: small  
+
+/* split screen */
+.split {
+  height: 100%;
+  width: 70%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+/* Control the left side */
+.left {
+  left: 0;
+  border-right-width: thin;
+  /* background-color: #111;*/
+}
+
+/* Control the right side */
+.right {
+  right: 0;
+   /* background-color: red;*/
 }

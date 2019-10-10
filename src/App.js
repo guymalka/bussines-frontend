@@ -8,6 +8,7 @@ import  RetailerTable  from  './components/RetailerTable.js';
 import  RetailerLoyaltyTable  from  './components/RetailerLoyaltyTable.js';
 import  RetailerInfo  from  './components/RetailerInfo.js';
 import  RetailerCustomers  from  './components/RetailerCustomers';
+import  RetailerCoupons  from  './components/RetailerCoupons';
 
 class App extends Component {
   constructor() {
@@ -46,6 +47,7 @@ class App extends Component {
                 <Route path="/RetailerInfo" component={RetailerInfo} />
                 <Route path="/RetailerLoyaltyTable" component={RetailerLoyaltyTable} />
                 <Route path="/RetailerCustomersTable" component={RetailerCustomers} />
+                <Route path="/RetailerCouponsTable" component={RetailerCoupons} />
                 <Route path="/login" component={LoginForm} />
               </Switch>
               </div>
