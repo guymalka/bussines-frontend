@@ -3,6 +3,15 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 
+export class CustomObject extends  Object  {
+        isEmpty (){ for(var key in this) {
+            if(this.hasOwnProperty(key))
+                return false;
+        }
+        return true;
+    }
+}
+
 export default class InputText extends React.Component {
     constructor(props) {
         super(props);

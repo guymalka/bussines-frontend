@@ -7,6 +7,128 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import '../App.css';
 
+
+class UpdateDayOpenHours extends React.Component{
+    constructor(props){
+        super(props)
+        this.selecthours = this.selecthours.bind(this)
+        this.selecttime = this.selecttime.bind(this)
+    }
+    state = {
+        hoursSelected: 6,
+        timeSelected: 0,
+        userPickedHour: false,
+        userPickedTime: false, 
+        hours: [ {value: 6, label: '6'}
+        ,{value: 7, label: '7'}
+        ,{value: 8, label: '8'}
+        ,{value: 9, label: '9'}
+        ,{value: 10, label: '10'}
+        ,{value: 11, label: '11'}
+        ,{value: 12, label: '12'}
+        ,{value: 13, label: '13'}
+        ,{value: 14, label: '14'}
+        ,{value: 15, label: '15'}
+        ,{value: 16, label: '16'}
+        ,{value: 17, label: '17'}
+        ,{value: 18, label: '18'}
+        ,{value: 19, label: '19'}
+        ,  ],
+        time: [ {value: 0, label: '00'}
+        ,{value: 30, label: '30'}  
+        ,  ]
+    }
+    selecthours(val){
+        let { userPickedTime, hoursSelected, timeSelected } = this.state;
+        this.setState({ userPickedHour: true, hoursSelected: val.value });
+        if (userPickedTime)
+           this.props.userPickTimeFrame(val.value, timeSelected) 
+        console.log(val);
+    }
+    selecttime(val){
+        let { userPickedHour, hoursSelected, timeSelected } = this.state;
+        this.setState({ userPickedTime: true, timeSelected: val.value });
+        if (userPickedHour)
+           this.props.userPickTimeFrame(hoursSelected, val.value)
+        console.log(val);    
+    }
+    render(){
+        let { edit, from, to } =  this.props;
+        return edit ? <div className="form-row" >
+            <div className="col-3" >
+                <Dropdown value={this.state.timeSelected} 
+                            options={this.state.time} 
+                            onChange={this.selecttime}  />
+            </div>
+            <div className="col-3" >
+                <Dropdown 
+                value={ this.state.hoursSelected } 
+                options={this.state.hours}  
+                onChange={this.selecthours}  />         
+            </div>
+            <div className="col-6" ></div>
+        </div>
+        : <span> { from } - { to }   </span>  
+
+    }
+}
+
+
+class OpenHours extends React.Component{
+    constructor(props){
+        super(props);
+        this.updateDays = this.updateDays.bind(this);
+        this.saveTimeFrame = this.saveTimeFrame.bind(this);
+    }
+    state = {
+        dayUserUpdate: 0,
+        edit: false
+    }
+    updateDays(item){
+        this.setState({edit : true, dayUserUpdate : item});
+    }
+    saveTimeFrame(hour ,day){
+        console.info(hour + "" + day);
+        this.setState({edit : false, dayUserUpdate: 0});
+        //TODO: call server, update data
+    }
+    render(){
+        let { edit, dayUserUpdate } = this.state;
+        return <div> 
+            <div className="form-row"  >
+                <div className="col-4" >ראשון</div>
+                    <div className="col-4" > 
+                        <UpdateDayOpenHours userPickTimeFrame={  this.saveTimeFrame } day={1} from={ "8:00"  } to={ "16:00" } edit={edit && dayUserUpdate == 1 }  /> 
+                    </div>
+                <div className="col-4" > <input onClick={ (item) => this.updateDays(1) } type="button" value={ edit && dayUserUpdate == 1  ? 'שמור' : 'עדכן' } /> </div>
+                </div>
+                <div className="form-row"  >
+                    <div className="col-4" >שני</div>
+                        <div className="col-4" > 
+                            <UpdateDayOpenHours userPickTimeFrame={  this.saveTimeFrame } day={2} from={ "8:00"  } to={ "16:00" } edit={edit && dayUserUpdate == 2 }  />
+                        </div>
+                    <div className="col-4" > <input onClick={ (item) => this.updateDays(2) } type="button" value={ edit && dayUserUpdate == 2 ? 'שמור' : 'עדכן' } /> </div>
+                </div>
+                <div className="form-row"  >
+                    <div className="col-4" >שלישי</div>
+                        <div className="col-4" > 
+                            <UpdateDayOpenHours userPickTimeFrame={  this.saveTimeFrame } day={3} from={ "8:00"  } to={ "16:00" } edit={edit && dayUserUpdate == 3 }  />
+                        </div>
+                    <div className="col-4" > <input onClick={ (item) => this.updateDays(3) } type="button" value={ edit && dayUserUpdate == 3 ? 'שמור' : 'עדכן' } /> </div>
+                </div>
+                <div className="form-row"  >
+                    <div className="col-4" >רביעי</div>
+                        <div className="col-4" > 
+                            <UpdateDayOpenHours userPickTimeFrame={  this.saveTimeFrame } day={4} from={ "8:00"  } to={ "16:00" } edit={edit && dayUserUpdate == 4  }  />
+                        </div>
+                    <div className="col-4" > <input onClick={ (item) => this.updateDays(4) } type="button" value={ edit && dayUserUpdate == 4 ? 'שמור' : 'עדכן' } /> </div>
+                </div>
+        </div>
+
+    }
+}
+
+
 class Stores extends React.Component {
     constructor(props){
         super(props);
@@ -88,6 +210,30 @@ class Stores extends React.Component {
             data={this.props.data}
             columns={[
                 {
+                    //Header: "שעות פתיחה",
+                    columns: [
+                      {
+                        expander: true,
+                        Header: () => <strong>שעות פתיחה</strong>,
+                        width: 65,
+                        Expander: ({ isExpanded, ...rest }) =>
+                          <div>
+                            {isExpanded
+                              ? <span>&#x2299;</span>
+                              : <span>&#x2295;</span>}
+                          </div>,
+                        style: {
+                          cursor: "pointer",
+                          fontSize: 25,
+                          padding: "0",
+                          textAlign: "center",
+                          userSelect: "none"
+                        },
+                        Footer: () => <span>&hearts;</span>
+                      }
+                    ]
+                  },
+                {
                     Cell: this.buttonCell
                 },
                 {
@@ -114,6 +260,7 @@ class Stores extends React.Component {
             ]}
             defaultPageSize={10}
             className="-striped -highlight"
+            SubComponent={() => <OpenHours /> }
             />
             <br />    
         </div>

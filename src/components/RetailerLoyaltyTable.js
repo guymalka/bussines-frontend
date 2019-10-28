@@ -120,7 +120,7 @@ class RetailerLoyaltyTable extends React.Component {
         return <div></div>
       else{
         let date = new Date(cellInfo.row.created);
-        return <div>{ date.getDate() + '/' + date.getMonth() + 1 + '/' + date.getFullYear() }</div>
+        return <div>{ date.getDate() + '/' + (date.getMonth() + 1).toString() + '/' + date.getFullYear().toString() }</div>
       }
     }
     renderyesnoCell(cellInfo){      

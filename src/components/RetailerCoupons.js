@@ -3,6 +3,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import { CustomObject } from '../components/common.js'
 
 
 const txtFieldState = {
@@ -181,10 +182,7 @@ class CouponsForm extends React.Component  {
 }
 
 
-const changeCheckbox = (cell) => {
-    console.log(cell);
-    return 'kuku'
-}
+
 
 class CouponsTable extends React.Component  {
     constructor(props){
@@ -192,6 +190,8 @@ class CouponsTable extends React.Component  {
         this.getCouponsByLoyalty = this.getCouponsByLoyalty.bind(this);
         this.getCouponsByRetailer = this.getCouponsByRetailer.bind(this);
         this.selectQuery = this.selectQuery.bind(this);
+        this.removeCoupon = this.removeCoupon.bind(this);
+        this.assignCoupon = this.assignCoupon.bind(this);
         //this.checkbox = this.checkbox.bind(this);
 
         //this.changeCheckbox = this.changeCheckbox.bind(this);
@@ -201,7 +201,16 @@ class CouponsTable extends React.Component  {
         data: [],
         columns : [
             {
-                Cell: this.checkbox.bind(this)
+                Cell: ({ original }) => {
+                    return (
+                        <input
+                            type="checkbox"
+                            className="checkbox"
+                            checked={this.state.selected[original.coupon_id] === true}
+                            onChange={() => this.toggleRow(original.coupon_id)}
+                        />
+                    );
+                }
             },
             {
             Header: "מספר קופון",
@@ -246,6 +255,8 @@ class CouponsTable extends React.Component  {
             }
 
         ],
+        selected: new CustomObject(), 
+        selectAll: 0,
         queryTypes : [{"value":1,"label":"כל הקופונים"},{"value":2,"label":"לפי מועדון"}],
         selectedQuery:{"value":1,"label":"כל הקופונים"}
 
@@ -253,14 +264,15 @@ class CouponsTable extends React.Component  {
     componentDidMount(){
         this.getCouponsByRetailer();
     }
-    changeCheckbox(e){
-        console.log(e);
-    }
-    checkbox(cellInfo){
-        console.log('this');
-      console.log(this);
-        return (<div><input type="checkbox" onChange={ event => {   console.dir(this)} }  /></div>)
-      }
+    toggleRow(coupon_id) {
+		const newSelected = Object.assign({}, this.state.selected);
+		newSelected[coupon_id] = !this.state.selected[coupon_id];
+		this.setState({
+			selected: newSelected,
+			selectAll: 2
+		});
+	}
+  
     selectQuery(e){
         this.setState({})
         switch(e.value){
@@ -282,6 +294,33 @@ class CouponsTable extends React.Component  {
                 this.setState({ data: res });
             });
     }
+    getCouponId(value){
+        console.dir(value);
+        var items = Object.keys(value);
+        return items;
+    }
+    removeCoupon(){
+        let items =this.getCouponId(this.state.selected)
+        console.dir ( items  );
+        fetch(`${process.env.REACT_APP_NOT_SECRET_CODE}/api/coupons/remove`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "DELETE",
+            body: JSON.stringify(items)
+        })
+    }
+    assignCoupon(){
+        fetch(`${process.env.REACT_APP_NOT_SECRET_CODE}/api/coupons/assign`, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify(this.state.selected)
+        })
+    }
     getCouponsByLoyalty(){
         fetch(`${process.env.REACT_APP_NOT_SECRET_CODE}/api/coupons/retailer-loyalty-coupons`)
             .then(res => res.json())
@@ -290,14 +329,23 @@ class CouponsTable extends React.Component  {
             });
     }
     render(){
-        const { data, columns, queryTypes } = this.state;
+        console.dir(this.state.selected)
+        const { data, columns, queryTypes, selected } = this.state;
         
         return <div>
                 <div className="form-row"  > 
                     <div className="form-group col-md-2" >
                         <Dropdown options={queryTypes} value={ queryTypes[0] } onChange={this.selectQuery}  />
                     </div>
-                    <div className="form-group col-md-10" ></div>
+                    <div className="form-group col-md-2" >
+                        <input disabled={ selected == {} } className="btn btn-success"
+                        onClick={ () =>  this.removeCoupon()} value=" הסר ממועדון" type="button" />
+                        </div>
+                    <div className="form-group col-md-2" >
+                        <input disabled={ selected == {} }  className="btn btn-success"
+                        onClick={ () =>  this.assignCoupon()} value="הקצה למועדון" type="button" />
+                        </div>
+                    <div className="form-group col-md-6" ></div>
                  </div>                 
                  <div className="form-row" >
                  <div className="form-group col-md-12" >

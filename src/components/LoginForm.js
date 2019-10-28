@@ -57,11 +57,15 @@ class LoginForm extends Component {
       } else {
           return (
               <div  >                  
-                  <form style={{  marginRight:'auto', marginLeft:'auto', display:'block' }} className="form-horizontal">
+                  <form style={{  marginRight:'auto', marginLeft:'auto', display:'block', textAlign: 'right' }} className="form-horizontal">
                   <div className="form-group">
-                  <div className="col-3 col-ml-auto">
-                  <h4>כניסה</h4>
+                      
+                      <div className="col-3 ">
+                          <h4>
+                  כניסה 
+                  </h4>
                       </div>
+                      <div className="col-9" ></div>
                       </div>
                   
                       <div className="form-group">
