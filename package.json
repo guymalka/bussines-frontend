@@ -11,7 +11,7 @@
     "express": "^4.16.4",
     "express-handlebars": "^3.0.2",
     "jade": "^1.11.0",
-    "mongoose": "^5.4.15",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "namor": "^1.1.1",
     "pug": "^2.0.3",
