@@ -52,7 +52,7 @@ H2.header{
 /* split screen */
 .split {
   height: 100%;
-  width: 70%;
+   width: 70%;
   position: fixed;
   z-index: 1;
   top: 0;
@@ -60,15 +60,39 @@ H2.header{
   padding-top: 20px;
 }
 
+/*left side -form */
+.split2 {
+  height: 100%;
+   width: 30%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+ul{
+  list-style: none;
+
+}
+
+.centered {
+  position: absolute;
+  top: 0%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
 /* Control the left side */
 .left {
   left: 0;
   border-right-width: thin;
-  /* background-color: #111;*/
+ /*   background-color: darkcyan;*/
 }
 
 /* Control the right side */
 .right {
   right: 0;
-   /* background-color: red;*/
+    /* background-color: red;*/
 }
