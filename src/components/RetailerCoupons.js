@@ -23,12 +23,12 @@ const ErrorValidationLabel = ({ txtLbl }) => (
     </label>
 );
 
-const Field = ({ valid, type, fieldId, fieldName, typeMismatch, formatErrorTxt, requiredTxt }) => {
+const Field = ({ valid, type, fieldId, fieldName, typeMismatch, formatErrorTxt, requiredTxt, onChange }) => {
     const renderErrorLabel = !valid ? <ErrorValidationLabel txtLbl={typeMismatch ? formatErrorTxt : requiredTxt} /> : "";
 
     return <div >
         <label className="margin" for={fieldId} > { fieldName }</label>
-        <input type={type} id={fieldId} name={fieldId} placeholder={fieldName} required />
+        <input type={type} id={fieldId} name={fieldId} placeholder={fieldName} onChange={onChange} required />
             <br/>
             {renderErrorLabel}
             <br/> </div>
@@ -153,13 +153,16 @@ class CouponsForm extends React.Component  {
         description: { ...txtFieldState, fieldName: "תיאור", required: true, requiredTxt: "תיאור הוא שדה חובה", type: "text" },
         oldPrice:    { ...txtFieldState, fieldName: "מחיר קודם", required: false, type: "number" },
         newPrice:    { ...txtFieldState, fieldName: "מחיר חדש", required: true, requiredTxt: "Last Name is required", type: "number" },
-        item_id:    { ...txtFieldState, fieldName: "מספר מוצר", required: true, requiredTxt: "Last Name is required", type: "number" },
+        item_id:     { ...txtFieldState, fieldName: "מספר מוצר", required: true, requiredTxt: "Last Name is required", type: "number" },
         restrictions: { ...txtFieldState, fieldName: "תנאי הקופון", required: true, requiredTxt: "תיאור הוא שדה חובה", type: "text" },
         duration:    { ...txtFieldState, fieldName: "מספר ימים", required: false, type: "number" },
-        file:    { ...txtFieldState, fieldName: "מספר ימים", required: false, type: "number" },
+        file:        { ...txtFieldState, fieldName: "קובץ", required: false, type: "file", onChange:  this.loadFile }  ,
         allFieldsValid: false
     }
-
+    loadFile = (e) => {
+        console.log('load file');
+        console.log(e);
+    }
     reduceFormValues = formElements => {
         const arrElements = Array.prototype.slice.call(formElements); //we convert elements/inputs into an array found inside form element
 
